@@ -1,0 +1,24 @@
+
+.todo-item {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 15px;
+    justify-content: space-between;
+    background-color: white;
+
+    &__buttons-container {
+        display: flex;
+        gap: 5px;
+    }
+
+    &__input {
+        flex-grow: 1;
+        border: none;
+
+        &, &:hover, &:focus {
+            border: none;
+            outline: none;
+        } 
+    }
+}

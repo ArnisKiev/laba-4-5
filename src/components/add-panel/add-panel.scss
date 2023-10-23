@@ -1,0 +1,25 @@
+
+
+.add-panel {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding: 8;
+    border: 1px solid green;
+    padding: 20px 15px;;
+    border-radius: 15px;
+    background-color: white;
+
+    &__input {
+        width: 100%;
+        font-size: 20px;
+        border: none;
+        outline: none;
+    }
+
+    &__checkbox--xl {
+        width: 25px;
+        height: 25px;
+    }
+
+}
