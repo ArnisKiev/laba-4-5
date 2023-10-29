@@ -9,7 +9,7 @@ function App() {
 
   const localStorageItems = localStorage.getItem('todo-list');
 
-  const testArray: ITodoItem[] =  localStorageItems?  JSON.parse(localStorageItems)  as ITodoItem[] :  [];
+  const testArray: ITodoItem[] = localStorageItems?  JSON.parse(localStorageItems) as ITodoItem[] :  [];
   const [filterType, setFilterType] = useState(FilterType.All);
 
   const [itemList, setItemList] = useState(testArray);
@@ -57,6 +57,7 @@ function App() {
       return id;
     }
 
+    saveInLocalStorage();
   };
 
   
