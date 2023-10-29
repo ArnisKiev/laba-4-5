@@ -8,62 +8,10 @@ import { useState } from 'react';
 function App() {
 
   const testArray: ITodoItem[] =  (JSON.parse(localStorage.getItem('todo-list') ?? '') as ITodoItem[]) || [];
-
-  const onAllItemsClick = function() {
-    setFilteredList([...itemList]);
-    setItemList([...itemList])
-    
-    alert('onALLClick')
-    console.log(filteredList)
-  }
-
-  const onCompletedItemsClick = function() {
-    const updatedFilteredList = (JSON.parse(JSON.stringify(itemList)) as ITodoItem[]).filter(x => x.isDone)
-    setFilteredList(updatedFilteredList);
-    
-    alert('onCompletedClick')
-    setItemList([...itemList])
-    console.log(updatedFilteredList)
-  };
-
-  const onUnCompletedItemsClick = function() {
-    const updatedFilteredList = (JSON.parse(JSON.stringify(itemList)) as ITodoItem[]).filter(x => !x.isDone)
-    setFilteredList(updatedFilteredList)
-    
-    alert('onUNCompletedClick')
-    setItemList([...itemList])
-    console.log(updatedFilteredList)
-  };
-
-  var lastFilter: () => void = onAllItemsClick;
-
-
-  //  [
-  //   {
-  //     id: 1,
-  //     isDone: false,
-  //     title: 'Test -1'
-  //   },
-  //   {
-  //     id: 2,
-  //     isDone: true,
-  //     title: 'Test -2'
-  //   },
-  //   {
-  //     id: 3,
-  //     isDone: false,
-  //     title: 'Test -4'
-  //   },
-  //   {
-  //     id: 4,
-  //     isDone: true,
-  //     title: 'Test -5'
-  //   }
-  // ];
+  const [filterType, setFilterType] = useState(FilterType.All);
 
   const [itemList, setItemList] = useState(testArray);
-  const [filteredList, setFilteredList] = useState([...itemList]);
-
+  const filteredList = filterFunction(itemList, filterType);
 
 
   const saveInLocalStorage = () => {
@@ -79,15 +27,15 @@ function App() {
       setItemList([...itemList]);
       saveInLocalStorage();
     }
-    lastFilter();
 
   }
 
   const onDelete = (item: ITodoItem) => {
-    setItemList(itemList.filter(x => x.id !== item.id));
-    console.log([...itemList])
+    const updatedList = itemList.filter(x => x.id !== item.id);
+    console.log('-----')
+    console.log(updatedList)
+    setItemList([...updatedList]);
     saveInLocalStorage();
-    lastFilter();
   } 
 
   const onAddItem = (item: ITodoItem) => {
@@ -98,8 +46,7 @@ function App() {
     itemList.push(item);
 
     setItemList([...itemList]);
-    lastFilter();
-
+   
 
     function getId(id: number = 1): number {
     
@@ -120,19 +67,13 @@ function App() {
       <div className='items-container' >
       <div className='statistic-panel'>
         <span onClick={() => {
-          onAllItemsClick();
-          alert('onAllCkick')
-          lastFilter = onAllItemsClick;
+         setFilterType(FilterType.All);
         }}>All({itemList.length})</span>
         <span onClick={() => {
-          alert('onCompletedClick')
-          onCompletedItemsClick();
-          lastFilter = onCompletedItemsClick;
+         setFilterType(FilterType.Completed);
           }}>Completed({itemList.filter(x=>x.isDone).length})</span>
         <span onClick={() => { 
-          alert('onUncompletedClick')
-         onUnCompletedItemsClick();
-         lastFilter = onUnCompletedItemsClick
+          setFilterType(FilterType.UnCompleted);
           }}>Uncompleted({itemList.filter(x => !x.isDone).length})</span>
       </div>
 
@@ -145,3 +86,29 @@ function App() {
 }
 
 export default App;
+
+export enum FilterType {
+  All,
+  Completed,
+  UnCompleted
+}
+
+export const filterFunction = (list: ITodoItem[], filterType: FilterType = FilterType.All ): ITodoItem[] => {
+
+  const completedList = () => {
+    const updatedFilteredList = list.filter(x => x.isDone);
+    return updatedFilteredList;
+  };
+
+  const uncompletedList = () => {
+    const updatedFilteredList = list.filter(x => !x.isDone)
+    return updatedFilteredList;
+  };
+
+  if (filterType === FilterType.Completed) return completedList();
+  
+  if (filterType === FilterType.UnCompleted) return uncompletedList();
+
+
+  return list;
+}

@@ -15,10 +15,15 @@
     &__input {
         flex-grow: 1;
         border: none;
+        padding: 8px 4px;
 
-        &, &:hover, &:focus {
+        &, &:hover {
             border: none;
             outline: none;
+        } 
+
+        &:focus {
+            border: 1px solid black;
         } 
     }
 }
