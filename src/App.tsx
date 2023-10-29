@@ -7,7 +7,9 @@ import { useState } from 'react';
 
 function App() {
 
-  const testArray: ITodoItem[] =  (JSON.parse(localStorage.getItem('todo-list') ?? '') as ITodoItem[]) || [];
+  const localStorageItems = localStorage.getItem('todo-list');
+
+  const testArray: ITodoItem[] =  localStorageItems?  JSON.parse(localStorageItems)  as ITodoItem[] :  [];
   const [filterType, setFilterType] = useState(FilterType.All);
 
   const [itemList, setItemList] = useState(testArray);
@@ -32,8 +34,6 @@ function App() {
 
   const onDelete = (item: ITodoItem) => {
     const updatedList = itemList.filter(x => x.id !== item.id);
-    console.log('-----')
-    console.log(updatedList)
     setItemList([...updatedList]);
     saveInLocalStorage();
   } 
